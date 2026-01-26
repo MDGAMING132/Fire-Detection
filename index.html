@@ -14,10 +14,40 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <button id="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+    
+    <div id="sidebar">
+      <div class="sidebar-header">
+        <h2>Side bar</h2>
+      </div>
+      <div class="sidebar-content">
+        <!-- Add your content here -->
+      </div>
+    </div>
+    
     <div id="map"></div>
     <div id="coords"></div>
 
     <script src="./globe.js"></script>
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        var toggle = document.getElementById("sidebar-toggle");
+        var mapEl = document.getElementById("map");
+        var coords = document.getElementById("coords");
+        
+        sidebar.classList.toggle("open");
+        toggle.classList.toggle("open");
+        mapEl.classList.toggle("sidebar-open");
+        if (coords) coords.classList.toggle("sidebar-open");
+        
+        toggle.innerHTML = sidebar.classList.contains("open") ? "✕" : "☰";
+        
+        setTimeout(function() {
+          if (typeof map !== "undefined") map.resize();
+        }, 300);
+      }
+    </script>
     <script src="./extensions.js"></script>
   </body>
 </html>
