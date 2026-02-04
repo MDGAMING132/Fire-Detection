@@ -1,0 +1,7 @@
+flask
+python-dotenv
+requests
+numpy
+gunicorn
+# Note: opencv-python is not needed for the backend API logic unless we do server-side image processing.
+# If we do, use opencv-python-headless
