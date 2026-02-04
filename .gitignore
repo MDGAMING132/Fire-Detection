@@ -1,1 +1,16 @@
-config.js
+# Local Alert System (Drone side)
+backend/live_feed_monitor.py
+
+# Models (too large for git)
+*.pt
+*.onnx
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Env
+.env
+
+# OS
+.DS_Store
