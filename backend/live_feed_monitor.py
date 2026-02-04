@@ -9,7 +9,10 @@ import os
 from ultralytics import YOLO
 
 # Configuration
-API_URL = "http://127.0.0.1:8000/api/vision-trigger"
+# Default to localhost, but allow override for Azure deployment
+DEFAULT_URL = "http://127.0.0.1:8000/api/vision-trigger"
+API_URL = os.getenv("FIRE_BACKEND_URL", DEFAULT_URL)
+
 MODEL_DIR = "G:/Forest-fire-detection/final_model"
 MODEL_1_PATH = os.path.join(MODEL_DIR, "fire and person.pt")
 MODEL_2_PATH = os.path.join(MODEL_DIR, "aerial_images.pt")
