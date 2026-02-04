@@ -16,45 +16,28 @@ def get_env(name, default=""):
 
 @app.get("/")
 def index():
+    # Serve the new "Professional UI" by default
+    return send_from_directory(os.path.join(BASE_DIR, "frontend"), "alert_system.html")
+
+@app.get("/map")
+def global_map():
+    # Fallback to the old global map if needed
     return send_from_directory(BASE_DIR, "index.html")
 
+@app.get("/assets/<path:subpath>")
+def frontend_assets(subpath):
+    # Serve assets from frontend/assets explicitly
+    return send_from_directory(os.path.join(BASE_DIR, "frontend/assets"), subpath)
 
-@app.get("/config")
-def config():
-    return jsonify(
-        {
-            "FIRMS_MAP_KEY": get_env("FIRMS_MAP_KEY"),
-            "FIRMS_WMS_URL": get_env("FIRMS_WMS_URL", "https://firms.modaps.eosdis.nasa.gov/wms/"),
-            "OPENWEATHER_KEY": get_env("OPENWEATHER_KEY"),
-            "DEFAULT_CENTER": [75, 20],
-            "DEFAULT_ZOOM": 2,
-            "SENTINEL_WMS_URL": get_env("SENTINEL_WMS_URL", "https://tiles.maps.eox.at/wms"),
-        }
-    )
-
-
-@app.get("/sentinelhub/token")
-def sentinelhub_token():
-    client_id = get_env("SENTINELHUB_CLIENT_ID")
-    client_secret = get_env("SENTINELHUB_CLIENT_SECRET")
-    if not client_id or not client_secret:
-        return jsonify({"error": "Sentinel Hub credentials not configured"}), 400
-
-    token_url = "https://services.sentinel-hub.com/oauth/token"
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": client_id,
-        "client_secret": client_secret,
-    }
-    response = requests.post(token_url, data=data, timeout=20)
-    if response.status_code != 200:
-        return jsonify({"error": "Token request failed", "details": response.text}), 502
-
-    return jsonify(response.json())
-
+@app.get("/scripts/<path:subpath>")
+def frontend_scripts(subpath):
+     # Serve scripts from root/scripts or frontend/scripts depending on where they are
+     # Based on file listing, there is a 'scripts' dir in root.
+     return send_from_directory(os.path.join(BASE_DIR, "scripts"), subpath)
 
 @app.get("/<path:filename>")
 def static_files(filename):
+    # Fallback for other root files
     return send_from_directory(BASE_DIR, filename)
 
 
